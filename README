@@ -1,0 +1,16 @@
+
+
+git clone git@github.com:/sametmax/killbills.git
+
+Python:
+
+- pip install pew --user
+- pew new killbills
+- pip install -r requirements.txt
+- pip install -r dev-equirements.txt
+
+- Install npm
+- cd project
+- npm install
+- npm webpack
+
