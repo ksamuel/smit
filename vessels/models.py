@@ -24,6 +24,12 @@ class BaseModel(TimeStampedModel):
 
 class Vessel(BaseModel):
 
+    HELICO_CHOICES = (
+        ('yes', 'Oui'),
+        ('no', 'Non'),
+        ('quiet_sea_only', 'PMC')  # french for "Pilotage Mer Calme"
+    )
+
     # source: SIRENE's "NOMNAVIRE" field
     name = models.CharField(
         max_length=128,
@@ -55,6 +61,21 @@ class Vessel(BaseModel):
         null=True,
         blank=True,
         verbose_name="Obs hélico"
+    )
+
+    # Source: Pilot input
+    helico = models.CharField(
+        choices=HELICO_CHOICES,
+        null=True,
+        blank=True,
+        max_length=32,
+    )
+
+    # Source: Pilot input
+    helico_platform_infos = models.CharField(
+        max_length=128,
+        null=True,
+        blank=True
     )
 
     def __repr__(self):
@@ -92,11 +113,7 @@ class Vessel(BaseModel):
 class VesselActivity(BaseModel):
 
     ROUTE_CHOICES = ((x, str(x)) for x in range(1, 16))
-    HELICO_CHOICES = (
-        ('yes', 'Oui'),
-        ('no', 'Non'),
-        ('quiet_sea_only', 'PMC')  # french for "Pilotage Mer Calme"
-    )
+
     TYPE_CHOICES = (
         ('incomming', 'E'),  # french for "Entrée"
         ('departing', 'S'),  # french for "Sortie"
@@ -148,26 +165,12 @@ class VesselActivity(BaseModel):
     )
 
     # Source: Operator input
+    # Currently unused. Keeping in case the client changes his mind.
     route = models.IntegerField(
         choices=ROUTE_CHOICES,
         null=True,
         blank=True,
         verbose_name="RTE"
-    )
-
-    # Source: Pilot input
-    helico = models.CharField(
-        choices=HELICO_CHOICES,
-        null=True,
-        blank=True,
-        max_length=32,
-    )
-
-    # Source: Pilot input
-    helico_platform_infos = models.CharField(
-        max_length=128,
-        null=True,
-        blank=True
     )
 
     # Source: sirene's "DATEDEBUTMVTPREVUE" field. timezone to be confirmed.

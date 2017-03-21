@@ -108,7 +108,8 @@ var app = new Vue({
   },
 
   data: {
-    vesselActivities: {}
+    vesselActivities: {},
+    userGroups: window.USER_GROUPS
   },
 
   methods: {
@@ -121,12 +122,26 @@ var app = new Vue({
           e.target.value
         ]
       ).then(
-        function (activity) {
-          store.commit('vesselActivity', activity);
-        },
+        function (activity) {},
         function (error) {
           console.log(error);
-          alert('The value could not be updated. Try again.')
+          alert("Cette valeur n'a pu être mise à jour. Veuillez réessayer.")
+        }
+      );
+    },
+    updateHelico: function(e, activity){
+
+      store.wamp.call(
+        'smit.vessel.update.helico',
+        [
+          activity.id,
+          e.target.value
+        ]
+      ).then(
+        function (activity) {},
+        function (error) {
+          console.log(error);
+          alert("Cette valeur n'a pu être mise à jour. Veuillez réessayer.")
         }
       );
     }
@@ -172,6 +187,11 @@ connection.onopen = function (session) {
       store.commit('vesselActivities', args[0]);
       header.lastUpdate = 0;
    });
+
+   session.subscribe('smit.activity.update', function onevent(args) {
+      store.commit('vesselActivity', args[0]);
+   });
+
 };
 
 connection.onclose = function(reason, details){

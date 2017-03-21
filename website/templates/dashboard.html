@@ -1,6 +1,12 @@
 {% extends "base.html" %}
+{% load jstools %}
 
 {% block content %}
+
+  <script>
+    USER_GROUPS = {{ groups|jsonify }};
+  </script>
+
   <nav class="navbar navbar-default navbar-fixed-top" id="header">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -18,7 +24,15 @@
         {% verbatim %}
           <li class="navbar-text">Dernière mise à jour: {{ lastUpdate }}s</li>
         {% endverbatim %}
-        <li class="navbar-text">Connecté en tant que : {{ user.username }}</li>
+        <li class="navbar-text">
+          Connecté en tant que : {{ user.username }}
+          (
+          {% for slug, name in groups.items %}
+            {{ name }}
+            {% if not forloop.last %}, {% endif %}
+          {% endfor %}
+          )
+        </li>
         {% if user.is_staff %}
           <li><a href="/admin">Zone d'administration</a></li>
         {% endif %}
@@ -76,7 +90,28 @@
             <td nowrap v-flash="activity.berth">
               {{ activity.berth }}
             </td>
-            <td v-flash="activity.helico">{{ activity.helico }}</td>
+            <td v-flash="activity.helico">
+
+              <span v-if='activity.anonymous'>
+                N/A
+              </span>
+
+              <select v-else-if="userGroups.helicopter_pilot"
+                      class="form-control"
+                      name="status"
+                      v-bind:value="activity.helico"
+                      v-on:change="updateHelico($event, activity)">
+                <option></option>
+                <option value="yes">Oui</option>
+                <option value="no">Non</option>
+                <option value="quiet_sea_only">PMC</option>
+              </select>
+
+              <span v-else>
+                {{ activity.helico }}
+              </span>
+
+            </td>
             <td v-flash="activity.sirene_time_estimate">
               {{ activity.sirene_time_estimate }}
             </td>
@@ -84,10 +119,10 @@
             <td v-flash="activity.status">
 
               <span v-if='activity.anonymous'>
-               N/A
+                N/A
               </span>
 
-              <select v-else
+              <select v-else-if="userGroups.operator"
                       class="form-control"
                       name="status"
                       v-bind:value="activity.status"
@@ -96,6 +131,10 @@
                 <option value="piloting">Piloter</option>
                 <option value="anchoring">Mouiller</option>
               </select>
+
+              <span v-else>
+                {{ activity.status }}
+              </span>
 
             </td>
             <td v-flash="activity.services">{{ activity.services }}</td>

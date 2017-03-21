@@ -32,7 +32,7 @@ class WampClient(ApplicationSession):
             def _(id, value):
                 log.info(f'Update activity "{id}" status to "{status}"')
                 activity = VesselActivity.objects.get(id=id)
-                activity.status = value or None
+                activity.status = status or None
                 activity.save()
                 return activity.to_dict(
                     timezone="Europe/Paris", include_vessel=True
@@ -40,9 +40,33 @@ class WampClient(ApplicationSession):
 
             activity = await loop.run_in_executor(None, _, id, status)
             activity['timestamp'] = pendulum.utcnow().timestamp()
-            return activity
 
+            self.publish('smit.activity.update', activity)
+            return activity
         self.register(update_activity_status, 'smit.activity.update.status')
+
+        async def update_vessel_helico(id, helico):
+            """ Update helicopter approval for the vessel of this activity """
+
+            def _(id, value):
+
+                activity = VesselActivity.objects.get(id=id)
+                vessel = activity.vessel
+
+                log.info(f'Update vessel "{vessel.id}" helico to "{helico}"')
+
+                vessel.helico = helico or None
+                activity.save()
+                return activity.to_dict(
+                    timezone="Europe/Paris", include_vessel=True
+                )
+
+            activity = await loop.run_in_executor(None, _, id, helico)
+            activity['timestamp'] = pendulum.utcnow().timestamp()
+
+            self.publish('smit.activity.update', activity)
+            return activity
+        self.register(update_activity_status, 'smit.vessel.update.helico')
 
         async def publish_csv_update(stream):
             activities = await save_csv(stream)

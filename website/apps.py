@@ -27,6 +27,7 @@ class WebsiteConfig(AppConfig):
                 admin = CustomUser.objects.create(
                     username="admin",
                     is_superuser=True,
+                    is_staff=True,
                 )
                 admin.set_password('admin')
                 admin.save()
