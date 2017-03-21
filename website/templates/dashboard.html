@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <nav class="navbar navbar-default navbar-fixed-top" id="header">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">SMIT - Tableau de bord</a>
+    </div>
+
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-right">
+        {% verbatim %}
+          <li class="navbar-text">Dernière mise à jour: {{ lastUpdate }}s</li>
+        {% endverbatim %}
+        <li class="navbar-text">Connecté en tant que : {{ user.username }}</li>
+        {% if user.is_staff %}
+          <li><a href="/admin">Zone d'administration</a></li>
+        {% endif %}
+
+        <li><a href="/logout">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container-fluid main" id="app">
+
+  <h2 class="sub-header">Navires en entrée</h2>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>BPM</th>
+        <th>Nom</th>
+        <th>Dgx</th>
+        <th nowrap>Call Sign</th>
+        <th>L</th>
+        <th>TE</th>
+        <th>From</th>
+        <th>Quai</th>
+        <th>Hélico</th>
+        <th nowrap title="Timezone Europe/Paris">ETA SIRENE</th>
+        <th>TUGS</th>
+        <th>P/M</th>
+        <th nowrap>OP COMMERCIALES</th>
+        <th nowrap>Obs SIRENE</th>
+        <th nowrap>Obs Hélico</th>
+        <th>Distance Point Rouge</th>
+      </tr>
+      </tr>
+    </thead>
+      <tbody name="activity-list" is="transition-group" >
+        <tr v-for="activity in incommingVessels" :key="activity.vessel" >
+            {% verbatim %}
+            <td class="good-to-go" v-flash="activity.good_to_go">
+              <i class="glyphicon glyphicon-ok"
+                 v-if="activity.good_to_go"></i>
+            </td>
+            <td nowrap>{{ activity.name }}</td>
+            <td class="dangerous-materials">
+               <i class="glyphicon glyphicon-warning-sign"
+                  v-if="activity.dangerous_materials"></i>
+            </td>
+            <td>{{ activity.call_sign }}</td>
+            <td>{{ activity.length }}m</td>
+            <td>{{ activity.draft }}m</td>
+            <td nowrap v-flash="activity.incoming_from">
+              {{ activity.incoming_from }}
+            </td>
+            <td nowrap v-flash="activity.berth">
+              {{ activity.berth }}
+            </td>
+            <td v-flash="activity.helico">{{ activity.helico }}</td>
+            <td v-flash="activity.sirene_time_estimate">
+              {{ activity.sirene_time_estimate }}
+            </td>
+            <td>{{ activity.tugs }}</td>
+            <td v-flash="activity.status">
+
+              <span v-if='activity.anonymous'>
+               N/A
+              </span>
+
+              <select v-else
+                      class="form-control"
+                      name="status"
+                      v-bind:value="activity.status"
+                      v-on:change="updateStatus($event, activity)">
+                <option></option>
+                <option value="piloting">Piloter</option>
+                <option value="anchoring">Mouiller</option>
+              </select>
+
+            </td>
+            <td v-flash="activity.services">{{ activity.services }}</td>
+            <td v-flash="activity.sirene_observation" class="observation">
+              <div>{{ activity.sirene_observation }}</div>
+            </td>
+            <td v-flash="activity.helico_observation" class="observation">
+              <div>{{ activity.helico_observation }}</div>
+            </td>
+            <td v-spot="activity.distance_to_red_dot">
+              {{ activity.distance_to_red_dot }}
+            </td>
+            {% endverbatim %}
+        </tr>
+      </tbody>
+  </table>
+
+  <h2 class="sub-header">Navires en sortie</h2>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>BPM</th>
+        <th nowrap>Nom</th>
+        <th>Dgx</th>
+        <th nowrap>Call Sign</th>
+        <th>L</th>
+        <th>TE</th>
+        <th nowrap>Quai</th>
+        <th nowrap>Dest</th>
+        <th>Hélico</th>
+        <th nowrap title="Timezone Europe/Paris">ETD SIRENE</th>
+        <th nowrap>Obs SIRENE</th>
+        <th nowrap>Obs Hélico</th>
+        <th>Distance Point Rouge</th>
+      </tr>
+    </thead>
+    <tbody name="activity-list" is="transition-group" >
+      <tr v-for="activity in outgoingVessels" :key="activity.vessel" >
+        {% verbatim %}
+        <td class="good-to-go" v-flash="activity.good_to_go">
+          <i class="glyphicon glyphicon-ok"
+             v-if="activity.good_to_go"></i>
+        </td>
+        <td>{{ activity.name }}</td>
+        <td class="dangerous-materials">
+           <i class="glyphicon glyphicon-warning-sign"
+              v-if="activity.dangerous_materials > 0"></i>
+        </td>
+        <td>{{ activity.call_sign }}</td>
+        <td>{{ activity.length }}m</td>
+        <td>{{ activity.draft }}m</td>
+        <td nowrap v-flash="activity.berth">
+          {{ activity.berth }}
+        </td>
+        <td nowrap v-flash="activity.leaving_to">
+          {{ activity.leaving_to }}
+        </td>
+        <td>{{ activity.helico }}</td>
+        <td v-flash="activity.sirene_time_estimate">
+          {{ activity.sirene_time_estimate }}
+        </td>
+        <td v-flash="activity.sirene_observation" class="observation">
+          <div>{{ activity.sirene_observation }}</div>
+        </td>
+        <td v-flash="activity.helico_observation" class="observation">
+          <div>{{ activity.helico_observation }}</div>
+        </td>
+        <td v-spot="activity.distance_to_red_dot">
+          {{ activity.distance_to_red_dot }}
+        </td>
+        {% endverbatim %}
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<script>
+
+</script>
+<script src="/static/vuex.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/autobahn.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/lodash.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/script.js" type="text/javascript" charset="utf-8"></script>
+{% endblock content %}
+

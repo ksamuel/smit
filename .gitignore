@@ -81,5 +81,12 @@ htmlcov
 node_modules
 
 # css
-/static/
+/static
 .sass-cache
+
+# secrets
+key.priv
+secret_key 
+
+# local files:
+local_*

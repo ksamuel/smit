@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+  <form class="form-signin" action="." method="post">
+    <h2 class="form-signin-heading">Entrez vos identifiants</h2>
+
+    {% if form.non_field_errors %}
+      <div class="alert alert-warning">
+          {% for error in form.non_field_errors %}
+              <p>{{ error }}</p>
+          {% endfor %}
+      </div>
+    {% endif %}
+
+    <p><label for="inputEmail"  >Nom d'utilisateur</label></p>
+    <p>{{ form.username.errors }}</p>
+    <p><input type="text" name="username" id="inputEmail" class="form-control"   required autofocus></p>
+    <p><label for="inputPassword"  >Mot de passe</label></p>
+    <p>{{ form.password.errors }}</p>
+    <p><input type="password" id="inputPassword" name="password" class="form-control"   required></p>
+    <input type="hidden" name="next" value="{{ next }}" />
+    {% csrf_token %}
+    <p><button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button></p>
+  </form>
+
+</div>
+
+{% endblock content %}

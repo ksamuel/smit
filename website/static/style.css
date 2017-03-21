@@ -1,0 +1,161 @@
+
+
+.main {
+  margin-top: 4em;
+}
+
+.main table select {
+  color: white;
+}
+
+.main table select {
+   background: transparent;
+   border: none;
+   border-bottom: dotted white 1px;
+   margin-right: -5px;
+   color: white;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.main table select::-ms-expand {
+    display: none;
+}
+
+.main table select option {
+   background: transparent;
+}
+
+
+body .main table th  {
+  vertical-align: middle;
+}
+
+body .main table td  {
+  vertical-align: middle;
+}
+
+.main table .good-to-go {
+  text-align: center;
+  color: #507449;
+}
+
+.main table .dangerous-materials {
+  text-align: center;
+  color: #BDBB83;
+}
+
+.activity-list-enter-active {
+  transition: all 1s;
+}
+
+.activity-list-enter {
+  background-color: blue !important;
+  color: black !important;
+  opacity: 0;
+}
+
+.activity-list-leave-active  {
+  transition: all 3s;
+  opacity: 0;
+  color: black !important;
+  background-color: red !important;
+}
+
+.activity-list-move {
+  transition: transform 1s;
+}
+
+@keyframes flash {
+    0% {
+        background-color: inherit;
+        color: inherit;
+    }
+    50% {
+        background-color: yellow;
+        color: black;
+    }
+    100% {
+        background-color: inherit;
+        color: inherit;
+    }
+}
+
+/* The element to apply the animation to */
+.flash {
+    animation-name: flash;
+    animation-duration: 2s;
+}
+
+
+@keyframes spot {
+    0% {
+        color: inherit;
+    }
+    50% {
+        color: yellow;
+    }
+    100% {
+        color: inherit;
+    }
+}
+
+/* The element to apply the animation to */
+.spot {
+    animation-name: spot;
+    animation-duration: 2s;
+}
+
+.observation div {
+  width: 25ex;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: all 3s;
+  white-space: pre;
+}
+
+.observation div:hover {
+  max-width: inherit;
+  white-space: inherit;
+  overflow: inherit;
+  text-overflow: ellipsis;
+}
+
+
+/*******************
+LOGIN FORM
+*********************/
+
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 20vh auto;
+}
+
+.form-signin button,  .form-signin label {
+  margin-top: 1em;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
