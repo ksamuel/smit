@@ -1,6 +1,7 @@
 
 from django.db.utils import OperationalError
 from django.apps import AppConfig
+from django.core.management import call_command
 
 
 class WebsiteConfig(AppConfig):
@@ -10,6 +11,10 @@ class WebsiteConfig(AppConfig):
     def ready(self):
 
         try:
+
+            call_command('migrate')
+            call_command('collectstatic', '--noinput')
+
             from django.contrib.auth.models import Group
 
             from .models import CustomUser

@@ -39,7 +39,7 @@
                     "type": "universal",
                     "endpoint": {
                         "type": "tcp",
-                        "port": 8080
+                        "port": 3333
                     },
                     "rawsocket": {
                     },
@@ -53,10 +53,13 @@
                             "static": {
                                 "type": "static",
                                 "directory": "../static"
+                            },
+                            "/": {
+                                "type": "wsgi",
+                                "module": "project.wsgi",
+                                "object": "application"
                             }
                         }
-
-
 
                     }
                 }

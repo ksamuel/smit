@@ -41,6 +41,8 @@ class WampClient(ApplicationSession):
             activity = await loop.run_in_executor(None, _, id, status)
             activity['timestamp'] = pendulum.utcnow().timestamp()
 
+            log.info(f'Update status info for activity {activity!r}')
+
             self.publish('smit.activity.update', activity)
             return activity
         self.register(update_activity_status, 'smit.activity.update.status')
@@ -56,7 +58,7 @@ class WampClient(ApplicationSession):
                 log.info(f'Update vessel "{vessel.id}" helico to "{helico}"')
 
                 vessel.helico = helico or None
-                activity.save()
+                vessel.save()
                 return activity.to_dict(
                     timezone="Europe/Paris", include_vessel=True
                 )
@@ -64,9 +66,11 @@ class WampClient(ApplicationSession):
             activity = await loop.run_in_executor(None, _, id, helico)
             activity['timestamp'] = pendulum.utcnow().timestamp()
 
+            log.info(f'Update helico info for activity {activity!r}')
+
             self.publish('smit.activity.update', activity)
             return activity
-        self.register(update_activity_status, 'smit.vessel.update.helico')
+        self.register(update_vessel_helico, 'smit.vessel.update.helico')
 
         async def publish_csv_update(stream):
             activities = await save_csv(stream)
@@ -96,5 +100,5 @@ class WampClient(ApplicationSession):
 
 
 if __name__ == '__main__':
-    runner = ApplicationRunner("ws://127.0.0.1:8080/ws", "realm1")
+    runner = ApplicationRunner("ws://127.0.0.1:3333/ws", "realm1")
     runner.run(WampClient)

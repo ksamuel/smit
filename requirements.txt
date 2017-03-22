@@ -1,3 +1,7 @@
+aioftp==0.6.3
+crossbar==17.2.1
+devpy==0.1.7
 Django==1.10.5
 django-extensions==1.7.6
 haversine==0.4.5
+pendulum==1.1.1

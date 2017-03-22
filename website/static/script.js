@@ -1,8 +1,11 @@
 var vesselActivities = {
   setActivity: function(state, newActivity){
+
+    if (newActivity.status) console.log('set', newActivity)
     var currentActivity = state.vesselActivities[newActivity.id];
     // update only activity if none exist already or if it's out of date
     if (!currentActivity || currentActivity.timestamp < newActivity.timestamp){
+      if (newActivity.status) console.log('update')
       Vue.set(state.vesselActivities, newActivity.id, newActivity)
       return newActivity;
     }
@@ -176,13 +179,14 @@ Vue.directive('spot', {
 
 
 var connection = new autobahn.Connection({
-  url: 'ws://127.0.0.1:8080/ws',
+  url: 'ws://127.0.0.1:3333/ws',
   realm: 'realm1'
 });
 
 connection.onopen = function (session) {
    store.wamp = session;
    console.log('Connected to server.')
+
    session.subscribe('smit.sirene.csv.update', function onevent(args) {
       store.commit('vesselActivities', args[0]);
       header.lastUpdate = 0;
