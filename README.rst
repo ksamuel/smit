@@ -8,22 +8,28 @@ Install python3.6 64 bits from https://www.python.org/ftp/python/3.6.0/python-3.
 
 Make sure to tick "Add Python to System PATH" in the installer settings.
 
+Install the Microsoft compiler from http://landinghub.visualstudio.com/visual-cpp-build-tools.
+
+It's a long and heavy install, but once SMIT is up and running, you can uninstall it if you wish to save disk space.
+
 Download SMIT from https://github.com/ksamuel/smit/archive/master.zip and unzip it where you wish.
 
 Open a terminal in the SMIT directory, where the requirements.txt file is, and run::
 
-    pip install -r requirements.txt
+    py -3.6 -m pip install -r requirements.txt
 
 Start SMIT
 ===========
 
-In the SMIT directory there is a .crossbar directory, containing a config.json file. You can start SMIT by running:
+In the SMIT directory there is a .crossbar directory. You can start SMIT by running:
 
-    crossbar start -c "absolute path to config file".
+    crossbar start --cbdir "absolute path to crossbar file".
 
 E.G::
 
-    crossbar start -c "C:/SMIT/.crossbar/config.json"
+    crossbar start -c ""C:/Users/TEMP/Desktop/smit-master""
+
+Use forward slashes, not backslaches.
 
 The program will start.
 
@@ -33,12 +39,6 @@ You should setup Windows to run the command when the computer starts.
 
 Default parameters
 ======================
-
-When the program starts, in the output, among other lines, you will see:
-
-Starting to log in "path to a file.log"
-
-This will be where the log file is.
 
 Most settings are in the administration pages, and you will be greated with a prompt to enter them after your first login. The default login and password are "admin" and have administrators rights.
 
