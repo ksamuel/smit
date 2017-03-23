@@ -8,7 +8,7 @@ Install python3.6 64 bits from https://www.python.org/ftp/python/3.6.0/python-3.
 
 Make sure to tick "Add Python to System PATH" in the installer settings.
 
-Download SMIT and unzip it where you wish.
+Download SMIT from https://github.com/ksamuel/smit/archive/master.zip and unzip it where you wish.
 
 Open a terminal in the SMIT directory, where the requirements.txt file is, and run::
 
