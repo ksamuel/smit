@@ -77,7 +77,7 @@
         <th nowrap>OP COMMERCIALES</th>
         <th nowrap>Obs SIRENE</th>
         <th nowrap>Obs Hélico</th>
-        <th>Distance Point Rouge</th>
+        <th>Dist. Pt Rouge</th>
       </tr>
       </tr>
     </thead>
@@ -163,7 +163,22 @@
               <div>{{ activity.sirene_observation }}</div>
             </td>
             <td v-flash="activity.helico_observation" class="observation">
-              <div>{{ activity.helico_observation }}</div>
+
+                <span v-if='activity.anonymous'>
+                  N/A
+                </span>
+
+                <input v-else-if="userGroups.helicopter_pilot"
+                        class="form-control"
+                        name="helico_observation"
+                        v-bind:value="activity.helico_observation"
+                        v-on:input="updateHelicoObs($event, activity)"
+                         />
+
+                <div v-else>
+                  {{ activity.helico_observation }}
+                </div>
+
             </td>
             <td v-spot="activity.distance_to_red_dot">
               {{ activity.distance_to_red_dot }}
@@ -191,7 +206,7 @@
         <th nowrap title="Timezone Europe/Paris">ETD SIRENE</th>
         <th nowrap>Obs SIRENE</th>
         <th nowrap>Obs Hélico</th>
-        <th>Distance Point Rouge</th>
+        <th>Dist. Pt Rouge</th>
       </tr>
     </thead>
     <tbody name="activity-list" is="transition-group" >
@@ -232,7 +247,21 @@
           <div>{{ activity.sirene_observation }}</div>
         </td>
         <td v-flash="activity.helico_observation" class="observation">
-          <div>{{ activity.helico_observation }}</div>
+
+              <span v-if='activity.anonymous'>
+                N/A
+              </span>
+
+              <input v-else-if="userGroups.helicopter_pilot"
+                      class="form-control"
+                      name="helico_observation"
+                      v-bind:value="activity.helico_observation"
+                      v-on:input="updateHelicoObs($event, activity)"
+                       />
+
+              <div v-else>
+                {{ activity.helico_observation }}
+              </div>
         </td>
         <td v-spot="activity.distance_to_red_dot">
           {{ activity.distance_to_red_dot }}
@@ -261,7 +290,7 @@
           <th nowrap title="Timezone Europe/Paris">ETD SIRENE</th>
           <th nowrap>Obs SIRENE</th>
           <th nowrap>Obs Hélico</th>
-          <th>Distance Point Rouge</th>
+          <th>Dist. Pt Rouge</th>
         </tr>
       </thead>
       <tbody name="activity-list" is="transition-group" >

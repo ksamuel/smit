@@ -131,7 +131,7 @@ var app = new Vue({
     vesselActivities: {},
     userGroups: window.USER_GROUPS,
     showHiddenVessels: false,
-    hiddenVessels: {}
+    hiddenVessels: {},
   },
 
   methods: {
@@ -155,6 +155,22 @@ var app = new Vue({
 
       store.wamp.call(
         'smit.vessel.update.helico',
+        [
+          activity.id,
+          e.target.value
+        ]
+      ).then(
+        function (activity) {},
+        function (error) {
+          console.log(error);
+          alert("Cette valeur n'a pu être mise à jour. Veuillez réessayer.")
+        }
+      );
+    },
+    updateHelicoObs: function(e, activity){
+      console.log("update", e.target.value)
+      store.wamp.call(
+        'smit.vessel.update.helico_obs',
         [
           activity.id,
           e.target.value

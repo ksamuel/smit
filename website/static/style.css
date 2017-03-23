@@ -6,14 +6,23 @@
 
 .main table select {
   color: white;
+  background: transparent;
+  border: none;
+  border-bottom: dotted white 1px;
+  margin-right: -5px;
+  color: white;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
-.main table select {
-   background: transparent;
-   border: none;
-   border-bottom: dotted white 1px;
-   margin-right: -5px;
-   color: white;
+.main table input {
+  color: white;
+  background: transparent;
+  border: none;
+  border-bottom: dotted white 1px;
+  margin-right: -5px;
+  color: white;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -107,21 +116,7 @@ body .main table td  {
     animation-duration: 2s;
 }
 
-.observation div {
-  width: 25ex;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  transition: all 3s;
-  white-space: pre;
-}
 
-.observation div:hover {
-  max-width: inherit;
-  white-space: inherit;
-  overflow: inherit;
-  text-overflow: ellipsis;
-}
 
 
 /*******************

@@ -72,6 +72,32 @@ class WampClient(ApplicationSession):
             return activity
         self.register(update_vessel_helico, 'smit.vessel.update.helico')
 
+        async def update_vessel_helico_obs(id, obs):
+            """ Update helicopter obs for the vessel of this activity """
+
+            def _(id, value):
+
+                activity = VesselActivity.objects.get(id=id)
+                vessel = activity.vessel
+
+                log.info(f'Update vessel "{vessel.id}" helico to "{obs}"')
+
+                vessel.helico_observation = obs or None
+                vessel.save()
+                return activity.to_dict(
+                    timezone="Europe/Paris", include_vessel=True
+                )
+
+            activity = await loop.run_in_executor(None, _, id, obs)
+            activity['timestamp'] = pendulum.utcnow().timestamp()
+
+            log.info(f'Update helico obs for activity {activity!r}')
+
+            self.publish('smit.activity.update', activity)
+            return activity
+        self.register(update_vessel_helico_obs, 'smit.vessel.update.helico_obs')
+
+
         async def publish_csv_update(stream):
             activities = await save_csv(stream)
             self.publish('smit.sirene.csv.update', activities)
