@@ -10,6 +10,7 @@ import aioftp
 import pendulum
 
 from vessels.models import Vessel, VesselActivity
+from website.models import Settings
 
 import devpy.develop as log
 
@@ -34,7 +35,7 @@ async def crawl_csv(
     path,
     csv_callback=print,
     tick=10 * 60,  # 10 minutes
-    max_timeout=3600
+    max_timeout=10
 ):
 
     if not callable(csv_callback):
@@ -48,7 +49,20 @@ async def crawl_csv(
 
         try:
 
+            try:
+                ftp_settings = Settings.objects.get(active=True)
+            except (Settings.DoesNotExist, Settings.MultipleObjectsReturned):
+                log.error('Unable to load ftp settings')
+                await asyncio.sleep(1)
+                continue
+
+            host = ftp_settings.sirene_ftp_ip_address
+            port = ftp_settings.sirene_ftp_port
+            login = ftp_settings.sirene_ftp_username
+            pwd = ftp_settings.sirene_ftp_password
+
             log.info(f"Connection to {host}:{port}...")
+
             async with aioftp.ClientSession(host, port, login, pwd) as client:
 
                 timeout = 1

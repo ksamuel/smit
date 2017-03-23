@@ -1,11 +1,9 @@
 var vesselActivities = {
   setActivity: function(state, newActivity){
 
-    if (newActivity.status) console.log('set', newActivity)
     var currentActivity = state.vesselActivities[newActivity.id];
     // update only activity if none exist already or if it's out of date
     if (!currentActivity || currentActivity.timestamp < newActivity.timestamp){
-      if (newActivity.status) console.log('update')
       Vue.set(state.vesselActivities, newActivity.id, newActivity)
       return newActivity;
     }

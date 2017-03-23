@@ -86,16 +86,6 @@ class WampClient(ApplicationSession):
             tick=3
         )
 
-        # coro = crawl_csv(
-        #     host="212.99.90.170",
-        #     login="pilotage",
-        #     pwd="Xl384l7w",
-        #     port=21,
-        #     path="VTM_ATTENDUS_PILOTAGE_V2.csv",
-        #     csv_callback=publish_csv_update,   # save_csv,
-        #     tick=3
-        # )
-
         asyncio.ensure_future(coro)
 
 

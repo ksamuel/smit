@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load bootstrap %}
+
+{% block content %}
+
+<div class="container">
+
+  <form class="form-settings" action="." method="post">
+    <h2 class="form-settings-heading">Veuillez configurer cette installation</h2>
+
+    {{ form|bootstrap }}
+
+    {% csrf_token %}
+    <p><button class="btn btn-lg btn-primary btn-block" type="submit">OK</button></p>
+  </form>
+
+</div>
+
+{% endblock content %}

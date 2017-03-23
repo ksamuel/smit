@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
 
-from .models import CustomUser
+from .models import CustomUser, Settings
 
 
 class CustomUserAdmin(UserAdmin):
@@ -19,5 +19,12 @@ class CustomUserAdmin(UserAdmin):
     )}]]
 
 
+class SettingsAdmin(admin.ModelAdmin):
+    model = Settings
+    list_display = ['name', 'active']
+
+
+admin.site.register(Settings, SettingsAdmin)
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.unregister(Group)
+

@@ -24,6 +24,9 @@ class BaseModel(TimeStampedModel):
 
 class Vessel(BaseModel):
 
+    class Meta:
+        verbose_name = "Navire"
+
     HELICO_CHOICES = (
         ('yes', 'Oui'),
         ('no', 'Non'),
@@ -39,7 +42,6 @@ class Vessel(BaseModel):
     # Source: SIRENE's "CALLSIGN" field
     call_sign = models.CharField(
         max_length=16,
-        help_text="Unique ship number for an owner"
     )
     # Source: SIRENE's "LONGUEUR" field. Unit to be confirmed.
     length = models.FloatField(
