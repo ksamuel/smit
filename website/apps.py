@@ -10,10 +10,13 @@ class WebsiteConfig(AppConfig):
 
     def ready(self):
 
+        from django.conf import settings
+
         try:
 
-            call_command('migrate')
-            call_command('collectstatic', '--noinput')
+            if not settings.DEBUG:
+                call_command('migrate')
+                call_command('collectstatic', '--noinput')
 
             from django.contrib.auth.models import Group
 

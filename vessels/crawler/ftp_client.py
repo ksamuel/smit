@@ -60,6 +60,7 @@ async def crawl_csv(
             port = ftp_settings.sirene_ftp_port
             login = ftp_settings.sirene_ftp_username
             pwd = ftp_settings.sirene_ftp_password
+            tick = ftp_settings.sirene_ftp_refresh_rate
 
             log.info(f"Connection to {host}:{port}...")
 
@@ -81,7 +82,8 @@ async def crawl_csv(
                             log.info('Callback ok.')
 
                     log.info(f'Next download in {tick}s.')
-                    await asyncio.sleep(tick)
+                    ftp_settings.refresh_from_db()
+                    await asyncio.sleep(ftp_settings.sirene_ftp_refresh_rate)
 
         except AttributeError as e:
 

@@ -181,7 +181,9 @@
 
             </td>
             <td v-spot="activity.distance_to_red_dot">
-              {{ activity.distance_to_red_dot }}
+              <template v-if="activity.distance_to_red_dot">
+               {{ activity.distance_to_red_dot }}km
+              </template>
             </td>
             {% endverbatim %}
         </tr>
@@ -264,7 +266,9 @@
               </div>
         </td>
         <td v-spot="activity.distance_to_red_dot">
-          {{ activity.distance_to_red_dot }}
+          <template v-if="activity.distance_to_red_dot">
+           {{ activity.distance_to_red_dot }}km
+          </template>
         </td>
         {% endverbatim %}
       </tr>
@@ -325,7 +329,9 @@
             <div>{{ activity.helico_observation }}</div>
           </td>
           <td v-spot="activity.distance_to_red_dot">
-            {{ activity.distance_to_red_dot }}
+            <template v-if="activity.distance_to_red_dot">
+             {{ activity.distance_to_red_dot }}km
+            </template>
           </td>
           {% endverbatim %}
         </tr>

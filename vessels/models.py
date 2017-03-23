@@ -73,13 +73,6 @@ class Vessel(BaseModel):
         max_length=32,
     )
 
-    # Source: Pilot input
-    helico_platform_infos = models.CharField(
-        max_length=128,
-        null=True,
-        blank=True
-    )
-
     def __repr__(self):
         return (f'Vessel(call_sign={self.call_sign!r}, name={self.name!r}, '
                 f'length={self.length!r}, draft={self.draft!r})')
@@ -272,14 +265,3 @@ class VesselActivity(BaseModel):
         vessel_activity_dict['sirene_time_estimate'] = time
 
         return vessel_activity_dict
-
-    # unused fields from SIERENE:
-    #  NUMERODEMANDE DESTINATION
-    # NUMEROSOFI  NAVIREDANGEREUX TYPEVTS NUMEROLLOYD
-
-
-    # Unkown field we shoudl provide:
-    # Dg      Boolean     Pastille rouge. En attente de réponse
-    # TUGS    ?   ?   Copy Sirene     En attente de réponse
-    # OP Commerciales ?   ?   Copy Sirene     En attente de réponse
-

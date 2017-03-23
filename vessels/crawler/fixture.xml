@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns:MSG_IVEF xmlns:ns="http://www.iala-to-be-confirmed.org/XMLSchema/IVEF/0.2.4">
+  <ns:Body>
+    <ns:ObjectDatas>
+      <ns:ObjectData>
+        <ns:TrackData COG="0.000000" SOG="0.000000" Id="16200" Heading="130.000000" ROT="0.0" Length="105.000000" Width="18.000000" SourceName="VTS" UpdateTime="2017-03-03T14:19:10.628Z" TrackStatus="1">
+          <ns:Pos Lat="5.295227" Long="-4.013607"/>
+          <ns:NavStatus Value="5"/>
+        </ns:TrackData>
+        <ns:VesselData Id="16200" SourceName="VTS" SourceType="1" UpdateTime="2017-03-03T14:19:10.628Z">
+          <ns:Identifier Callsign="9HHA9  " IMO="9004401" Name="GREEN GLACIER" MMSI="636016700"/>
+        </ns:VesselData>
+        <ns:VoyageData Id="16200" Draught="6.200000" DestName="ABIDJAN             " ETA="2017-02-26T13:30:00.000Z" SourceName="VTS" SourceType="1" UpdateTime="2017-03-03T14:19:10.628Z"/>
+        <ns:TaggedItem Key="VesselType" Value="Cargo ship"/>
+        <ns:TaggedItem Key="TargetClass" Value="Standard"/>
+        <ns:TaggedItem Key="AisFlag" Value="1"/>
+      </ns:ObjectData>
+      <ns:ObjectData>
+        <ns:TrackData COG="0.000000" SOG="0.000000" Id="18600" Heading="256.000000" Length="44.000000" Width="8.000000" SourceName="VTS" UpdateTime="2017-03-03T14:19:10.628Z" TrackStatus="1">
+          <ns:Pos Lat="5.290191" Long="-4.014345"/>
+          <ns:NavStatus Value="15"/>
+        </ns:TrackData>
+        <ns:VesselData Id="18600" SourceName="VTS" SourceType="1" UpdateTime="2017-03-03T14:19:10.628Z">
+          <ns:Identifier Name="JINSHENSHUI" MMSI="412200255"/>
+        </ns:VesselData>
+        <ns:VoyageData Id="18600" SourceName="VTS" SourceType="1" UpdateTime="2017-03-03T14:19:10.628Z"/>
+        <ns:TaggedItem Key="VesselType" Value="Fishing vessel"/>
+        <ns:TaggedItem Key="TargetClass" Value="Standard"/>
+        <ns:TaggedItem Key="AisFlag" Value="1"/>
+      </ns:ObjectData>
+    </ns:ObjectDatas>
+  </ns:Body>
+</ns:MSG_IVEF>

@@ -91,14 +91,14 @@ class Settings(TimeStampedModel):
         ]
     )
 
-    hn_ip_address = models.GenericIPAddressField(
+    nh_ip_address = models.GenericIPAddressField(
         protocol='IPv4',
         verbose_name="Adresse IP du server HN",
         blank=True,
         null=True
     )
 
-    hn_port = models.PositiveIntegerField(
+    nh_port = models.PositiveIntegerField(
         verbose_name="Port du serveur HN",
         blank=True,
         null=True,
@@ -107,18 +107,43 @@ class Settings(TimeStampedModel):
         ]
     )
 
-    hn_username = models.CharField(
+    nh_username = models.CharField(
         verbose_name="Login du serveur NH",
         max_length=128,
         blank=True,
         null=True
     )
 
-    hn_password = models.CharField(
+    nh_password = models.CharField(
         verbose_name="Mot de passe du serveur NH",
         max_length=128,
         blank=True,
         null=True
+    )
+
+    nh_refresh_rate = models.PositiveIntegerField(
+        verbose_name=(
+            "Nombre de secondes entre deux mises "
+            "à jour des données HN"
+        ),
+        default=10,
+        validators=[
+            MinValueValidator(1)
+        ]
+    )
+
+    red_dot_lat = models.FloatField(
+        verbose_name="Latitude du point rouge",
+        blank=True,
+        null=True,
+        default=50.9675
+    )
+
+    red_dot_long = models.FloatField(
+        verbose_name="Longitude du point rouge",
+        blank=True,
+        null=True,
+        default=1.9
     )
 
     def save(self, *args, **kwargs):

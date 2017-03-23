@@ -4,8 +4,8 @@ var vesselActivities = {
     var currentActivity = state.vesselActivities[newActivity.id];
     // update only activity if none exist already or if it's out of date
     if (!currentActivity || currentActivity.timestamp < newActivity.timestamp){
-      Vue.set(state.vesselActivities, newActivity.id, newActivity)
-      return newActivity;
+      currentActivity = Object.assign({}, currentActivity, newActivity)
+      Vue.set(state.vesselActivities, newActivity.id, currentActivity)
     }
     return currentActivity;
   },
@@ -24,6 +24,17 @@ var store = new Vuex.Store({
   mutations: {
 
     vesselActivity: vesselActivities.setActivity,
+
+    vesselDistances: function(state, distances){
+      _.forOwn(distances, function(distance, callSign) {
+        console.log(distance, callSign)
+        _.forOwn(state.vesselActivities, function(activity, id) {
+          if (activity.call_sign == callSign){
+            Vue.set(activity, 'distance_to_red_dot', distance);
+          }
+        });
+      });
+    },
 
     vesselActivities: function(state, newVesselActivities) {
 
@@ -236,6 +247,12 @@ connection.onopen = function (session) {
    session.subscribe('smit.activity.update', function onevent(args) {
       store.commit('vesselActivity', args[0]);
    });
+
+   session.subscribe('smit.nh.xml.update', function onevent(args) {
+      store.commit('vesselDistances', args[0]);
+   });
+
+
 
 };
 

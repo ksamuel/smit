@@ -18,6 +18,7 @@ import devpy.develop as log
 
 from vessels.models import VesselActivity # noqa
 from vessels.crawler.ftp_client import crawl_csv, save_csv # noqa
+from vessels.crawler.nh_client import process_xml, crawl_xml # noqa
 
 
 class WampClient(ApplicationSession):
@@ -108,11 +109,17 @@ class WampClient(ApplicationSession):
             pwd="password",
             port=2121,
             path="fixture.csv",
-            csv_callback=publish_csv_update,   # save_csv,
+            csv_callback=publish_csv_update,
             tick=3
         )
 
         asyncio.ensure_future(coro)
+
+        async def publish_xml_update(stream):
+            distances = await process_xml(stream)
+            self.publish('smit.nh.xml.update', distances)
+
+        asyncio.ensure_future(crawl_xml(xml_callback=publish_xml_update))
 
 
 if __name__ == '__main__':
