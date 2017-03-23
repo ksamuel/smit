@@ -64,14 +64,6 @@
                     }
                 }
             ]
-        },
-        {
-            "type": "guest",
-            "executable": "python",
-            "arguments": ["vessels/crawler/wamp_client.py"],
-            "options": {
-               "workdir": ".."
-            }
         }
     ]
 }
