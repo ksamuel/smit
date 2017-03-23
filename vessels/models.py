@@ -261,10 +261,14 @@ class VesselActivity(BaseModel):
         # cast date to string
         time = vessel_activity_dict['sirene_time_estimate']
         if time:
+            now = pendulum.now().in_timezone(timezone)
             # ensure we always have a pendulum object and convert
             # to local timezone
-            time = pendulum.instance(time).in_timezone('Europe/Paris')
-            time = f'{time:%H:%M}'
+            time = pendulum.instance(time).in_timezone(timezone)
+            if now.day == time.day:
+                time = f'{time:%H:%M}'
+            else:
+                time = f'{time:%d/%m/%y %H:%M}'
         vessel_activity_dict['sirene_time_estimate'] = time
 
         return vessel_activity_dict

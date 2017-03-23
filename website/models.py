@@ -14,6 +14,12 @@ from django_extensions.db.models import TimeStampedModel
 class CustomUser(AbstractUser, TimeStampedModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
+    def save(self, *args, **kwargs):
+        """ Superusers are always staff """
+        if self.is_superuser:
+            self.is_staff = True
+        super().save(*args, **kwargs)
+
 
 def generate_setting_name():
     return "Conf du {:%d/%m/%y}".format(pendulum.utcnow())

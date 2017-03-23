@@ -45,11 +45,23 @@
 
 <div class="container-fluid main" id="app">
 
+  <p class="hidden-vessels-toggle" v-if=showHiddenVessels>
+    <a href="#" v-on:click.prevent="showHiddenVessels = false">
+    Cacher les bateaux masqués
+    </a>
+  </p>
+  <p class="hidden-vessels-toggle" v-else=showHiddenVessels>
+    <a href="#" v-on:click.prevent="showHiddenVessels = true">
+    Afficher les bateaux masqués
+    </a>
+  </p>
+
   <h2 class="sub-header">Navires en entrée</h2>
 
   <table class="table table-striped">
     <thead>
       <tr>
+        <th></th>
         <th>BPM</th>
         <th>Nom</th>
         <th>Dgx</th>
@@ -70,8 +82,17 @@
       </tr>
     </thead>
       <tbody name="activity-list" is="transition-group" >
-        <tr v-for="activity in incommingVessels" :key="activity.vessel" >
+        <tr v-for="activity in incommingVessels"
+            :key="activity.id"
+            v-if="!hiddenVessels[activity.id] || showHiddenVessels" >
             {% verbatim %}
+            <td class="text-center">
+              <a v-if="hiddenVessels[activity.id]"
+                 href="#" class="glyphicon glyphicon-eye-open"
+                 v-on:click.prevent="showActivity(activity)"></a>
+              <a v-else href="#" class="glyphicon glyphicon-eye-close"
+                 v-on:click.prevent="hideActivity(activity)"></a>
+            </td>
             <td class="good-to-go" v-flash="activity.good_to_go">
               <i class="glyphicon glyphicon-ok"
                  v-if="activity.good_to_go"></i>
@@ -115,7 +136,7 @@
             <td v-flash="activity.sirene_time_estimate">
               {{ activity.sirene_time_estimate }}
             </td>
-            <td>{{ activity.tugs }}</td>
+            <td class="text-center">{{ activity.tugs }}</td>
             <td v-flash="activity.status">
 
               <span v-if='activity.anonymous'>
@@ -157,6 +178,7 @@
   <table class="table table-striped">
     <thead>
       <tr>
+        <th></th>
         <th>BPM</th>
         <th nowrap>Nom</th>
         <th>Dgx</th>
@@ -173,8 +195,17 @@
       </tr>
     </thead>
     <tbody name="activity-list" is="transition-group" >
-      <tr v-for="activity in outgoingVessels" :key="activity.vessel" >
+      <tr v-for="activity in outgoingVessels"
+          :key="activity.id"
+          v-if="!hiddenVessels[activity.id] || showHiddenVessels">
         {% verbatim %}
+            <td class="text-center">
+              <a v-if="hiddenVessels[activity.id]"
+                 href="#" class="glyphicon glyphicon-eye-open"
+                 v-on:click.prevent="showActivity(activity)"></a>
+              <a v-else href="#" class="glyphicon glyphicon-eye-close"
+                 v-on:click.prevent="hideActivity(activity)"></a>
+            </td>
         <td class="good-to-go" v-flash="activity.good_to_go">
           <i class="glyphicon glyphicon-ok"
              v-if="activity.good_to_go"></i>
@@ -210,6 +241,68 @@
       </tr>
     </tbody>
   </table>
+
+  <template v-if="showHiddenVessels">
+
+    <h2 class="sub-header">Navires en déhalage</h2>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>BPM</th>
+          <th nowrap>Nom</th>
+          <th>Dgx</th>
+          <th nowrap>Call Sign</th>
+          <th>L</th>
+          <th>TE</th>
+          <th nowrap>Quai</th>
+          <th nowrap>Dest</th>
+          <th>Hélico</th>
+          <th nowrap title="Timezone Europe/Paris">ETD SIRENE</th>
+          <th nowrap>Obs SIRENE</th>
+          <th nowrap>Obs Hélico</th>
+          <th>Distance Point Rouge</th>
+        </tr>
+      </thead>
+      <tbody name="activity-list" is="transition-group" >
+        <tr v-for="activity in shiftingVessels" :key="activity.id" >
+          {% verbatim %}
+          <td class="good-to-go" v-flash="activity.good_to_go">
+            <i class="glyphicon glyphicon-ok"
+               v-if="activity.good_to_go"></i>
+          </td>
+          <td>{{ activity.name }}</td>
+          <td class="dangerous-materials">
+             <i class="glyphicon glyphicon-warning-sign"
+                v-if="activity.dangerous_materials > 0"></i>
+          </td>
+          <td>{{ activity.call_sign }}</td>
+          <td>{{ activity.length }}m</td>
+          <td>{{ activity.draft }}m</td>
+          <td nowrap v-flash="activity.berth">
+            {{ activity.berth }}
+          </td>
+          <td nowrap v-flash="activity.leaving_to">
+            {{ activity.leaving_to }}
+          </td>
+          <td>{{ activity.helico }}</td>
+          <td v-flash="activity.sirene_time_estimate">
+            {{ activity.sirene_time_estimate }}
+          </td>
+          <td v-flash="activity.sirene_observation" class="observation">
+            <div>{{ activity.sirene_observation }}</div>
+          </td>
+          <td v-flash="activity.helico_observation" class="observation">
+            <div>{{ activity.helico_observation }}</div>
+          </td>
+          <td v-spot="activity.distance_to_red_dot">
+            {{ activity.distance_to_red_dot }}
+          </td>
+          {% endverbatim %}
+        </tr>
+      </tbody>
+    </table>
+  </template>
 
 </div>
 

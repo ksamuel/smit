@@ -5,3 +5,5 @@ Django==1.10.5
 django-extensions==1.7.6
 haversine==0.4.5
 pendulum==1.1.1
+pypiwin32
+django-bootstrap-form==3.2.1

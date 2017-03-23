@@ -105,12 +105,33 @@ var app = new Vue({
       })
 
       return res;
-    }
+    },
+    shiftingVessels: function () {
+
+      var activities = this.$store.state.vesselActivities;
+      var res =  _.values(_.pickBy(activities, function (activity) {
+        return activity.type == "shifting";
+      }));
+
+      res.sort(function(a, b){
+        if(a.sirene_time_estimate < b.sirene_time_estimate){
+           return -1;
+        };
+        if(a.sirene_time_estimate > b.sirene_time_estimate){
+           return 1;
+        };
+        return 0;
+      })
+
+      return res;
+    },
   },
 
   data: {
     vesselActivities: {},
-    userGroups: window.USER_GROUPS
+    userGroups: window.USER_GROUPS,
+    showHiddenVessels: false,
+    hiddenVessels: {}
   },
 
   methods: {
@@ -145,7 +166,13 @@ var app = new Vue({
           alert("Cette valeur n'a pu être mise à jour. Veuillez réessayer.")
         }
       );
-    }
+    },
+    showActivity: function(activity){
+      Vue.set(this.hiddenVessels, activity.id, false)
+    },
+    hideActivity: function(activity){
+      Vue.set(this.hiddenVessels, activity.id, true)
+    },
   }
 })
 

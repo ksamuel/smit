@@ -14,7 +14,6 @@ class CustomUserAdmin(UserAdmin):
         'password',
         'is_active',
         'is_superuser',
-        'is_staff',
         'groups'
     )}]]
 
