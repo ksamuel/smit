@@ -145,4 +145,4 @@ async def process_xml(xml):
         return distances
 
     except Exception as e:
-        log.exception("Unable to read xml stream.")
+        log.exception(f"Unable to read xml stream: {xml!r}")
