@@ -125,6 +125,7 @@ async def process_xml(xml):
                 call_sign = id_tag.get('Callsign').strip()
             except AttributeError:
                 log.error('No call sign for a vessel in this xml')
+                continue
             try:
                 pos_tag = list(tag.findall('.//ns:Pos', XML_NS))[0]
             except IndexError:
