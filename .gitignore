@@ -1,3 +1,5 @@
+*.lnk
+
 #### joe made this: http://goel.io/joe
 
 #####=== Python ===#####
@@ -87,6 +89,7 @@ node_modules
 # secrets
 key.priv
 secret_key 
+key.pub
 
 # local files:
 local_*

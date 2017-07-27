@@ -17,8 +17,8 @@ var store = new Vuex.Store({
   state: {
     wamp: undefined,
     vesselActivities: vesselActivities.state,
-    // keepStaleActivitiesFor:  60 * 1000 * 5, // keep vessels with no data for 5 minutes
-    keepStaleActivitiesFor:  1, // don't keep vessels with no data
+    keepStaleActivitiesFor:  60 * 1000 * 5, // keep vessels with no data for 5 minutes
+    //keepStaleActivitiesFor:  1, // don't keep vessels with no data
   },
 
   mutations: {
@@ -231,7 +231,7 @@ Vue.directive('spot', {
 
 
 var connection = new autobahn.Connection({
-  url: 'ws://127.0.0.1:3333/ws',
+  url: 'ws://' + window.location.host + '/ws',
   realm: 'realm1'
 });
 

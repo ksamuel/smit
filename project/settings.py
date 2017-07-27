@@ -47,7 +47,10 @@ except FileNotFoundError:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(int(os.environ.get('SMIT_DEBUG', False)))
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
+# Change this settings to an explicit list of IP 
+# If you decide to expose this software outside of the local
+# networks
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition

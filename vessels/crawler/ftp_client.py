@@ -4,6 +4,7 @@ import csv
 import asyncio
 import inspect
 import hashlib
+import logging
 
 import aioftp
 
@@ -13,6 +14,10 @@ from vessels.models import Vessel, VesselActivity
 from website.models import Settings
 
 import devpy.develop as log
+
+
+logger = logging.getLogger("aioftp.client")
+logger.propagate = False
 
 
 class DictReaderStrip(csv.DictReader):
@@ -61,6 +66,7 @@ async def crawl_csv(
             login = ftp_settings.sirene_ftp_username
             pwd = ftp_settings.sirene_ftp_password
             tick = ftp_settings.sirene_ftp_refresh_rate
+            path = ftp_settings.sirene_csv_file_path
 
             log.info(f"Connection to {host}:{port}...")
 
