@@ -89,8 +89,11 @@ async def crawl_xml(
                         end = buffer.find(XML_CLOSING_TAG)
 
                         if (start != -1 and end != -1):
-                            log.info('Passing xml to callback.')
+                            log.info('Passing XML to callback.')
                             xml = buffer[start:end + len(XML_CLOSING_TAG)]
+                            if not xml:
+                                log.error(f'XML is empty, skipping. (xml: {xml!r})')
+                                continue
                             await xml_callback(xml)
                             break
 
