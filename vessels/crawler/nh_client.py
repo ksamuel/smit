@@ -111,6 +111,7 @@ async def crawl_xml(
 
 
 async def process_xml(xml):
+    log.debug(f'Processing xml: {xml!r}')
     distances = {}
     try:
         nh_settings = Settings.objects.get(active=True)
@@ -127,8 +128,10 @@ async def process_xml(xml):
             try:
                 call_sign = id_tag.get('Callsign').strip()
             except AttributeError:
-                log.error('No call sign for a vessel in this xml')
+                xmlstr = ET.tostring(id_tag, encoding='utf8', method='xml')
+                log.error(f'No call sign for a vessel in this xml: {xmlstr!r}')
                 continue
+
             try:
                 pos_tag = list(tag.findall('.//ns:Pos', XML_NS))[0]
             except IndexError:
@@ -143,6 +146,12 @@ async def process_xml(xml):
                 (nh_settings.red_dot_lat, nh_settings.red_dot_long),
                 (lat, long)
             ), 2)
+
+        try:
+            log.info('Checking xml sanity. Last call sign:')
+            log.info(call_sign)
+        except NameError:
+            log.error(f'No call signs found in xml: {xml!r}')
 
         log.info(f'New distances to red dot: {distances!r}')
         return distances
