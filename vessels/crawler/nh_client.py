@@ -7,6 +7,9 @@ import xml.etree.ElementTree as ET
 
 import devpy.develop as log
 
+# Boost the log max file size to 1Gb
+log.handlers[0].maxBytes *= 1000
+
 from haversine import haversine
 
 from website.models import Settings
@@ -75,6 +78,7 @@ async def crawl_xml(
                 while True:
 
                     buffer = ""
+                    empty_xml = 0
                     while True:
                         log.info('Download a piece of xml.')
                         data = await reader.read(100000)
@@ -93,7 +97,15 @@ async def crawl_xml(
                             xml = buffer[start:end + len(XML_CLOSING_TAG)]
                             if not xml:
                                 log.error(f'XML is empty, skipping. (xml: {xml!r})')
+                                empty_xml += 1
+                                # maybe the session timed out ?
+                                if empty_xml >= 5:
+                                	writer.write(login_payload.encode('utf8'))
+                                	empty_xml = 0
                                 continue
+
+
+
                             await xml_callback(xml)
                             break
 

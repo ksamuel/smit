@@ -15,6 +15,9 @@ from website.models import Settings
 
 import devpy.develop as log
 
+# Boost the log max file size to 1Gb
+log.handlers[0].maxBytes *= 1000
+
 
 logger = logging.getLogger("aioftp.client")
 logger.propagate = False
