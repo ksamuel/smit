@@ -7,6 +7,9 @@ import xml.etree.ElementTree as ET
 
 import devpy.develop as log
 
+# Boost the log max file size to 1Gb
+log.handlers[0].maxBytes *= 1000
+
 from haversine import haversine
 
 from website.models import Settings
@@ -77,6 +80,7 @@ async def crawl_xml(
                 while connected:
 
                     buffer = ""
+                    empty_xml = 0
                     while True:
                         log.info('Download a piece of xml.')
                         data = await reader.read(100000)
@@ -102,6 +106,9 @@ async def crawl_xml(
                                     break
                                 log.error(f'XML is empty, skipping. (buffer: {buffer!r})')
                                 continue
+
+
+
                             await xml_callback(xml)
                             break
                     else:
@@ -122,6 +129,7 @@ async def crawl_xml(
 
 
 async def process_xml(xml):
+    log.debug(f'Processing xml')
     distances = {}
     try:
         nh_settings = Settings.objects.get(active=True)
@@ -138,8 +146,10 @@ async def process_xml(xml):
             try:
                 call_sign = id_tag.get('Callsign').strip()
             except AttributeError:
-                log.error('No call sign for a vessel in this xml')
+                xmlstr = ET.tostring(id_tag, encoding='utf8', method='xml')
+                log.error(f'No call sign for a vessel in this xml: {xmlstr!r}')
                 continue
+
             try:
                 pos_tag = list(tag.findall('.//ns:Pos', XML_NS))[0]
             except IndexError:
@@ -154,6 +164,12 @@ async def process_xml(xml):
                 (nh_settings.red_dot_lat, nh_settings.red_dot_long),
                 (lat, long)
             ), 2)
+
+        try:
+            log.info('Checking xml sanity. Last call sign:')
+            log.info(call_sign)
+        except NameError:
+            log.error(f'No call signs found in xml: {xml!r}')
 
         log.info(f'New distances to red dot: {distances!r}')
         return distances

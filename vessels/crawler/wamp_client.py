@@ -16,6 +16,9 @@ from autobahn.asyncio.wamp import ApplicationSession, ApplicationRunner # noqa
 
 import devpy.develop as log
 
+# Boost the log max file size to 1Gb
+log.handlers[0].maxBytes *= 1000
+
 from vessels.models import VesselActivity # noqa
 from vessels.crawler.ftp_client import crawl_csv, save_csv # noqa
 from vessels.crawler.nh_client import process_xml, crawl_xml # noqa
