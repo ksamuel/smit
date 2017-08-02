@@ -72,7 +72,9 @@ async def crawl_xml(
                 writer.write(login_payload.encode('utf8'))
 
                 timeout = 1
-                while True:
+                connected = True
+
+                while connected:
 
                     buffer = ""
                     while True:
@@ -92,19 +94,28 @@ async def crawl_xml(
                             log.info('Passing XML to callback.')
                             xml = buffer[start:end + len(XML_CLOSING_TAG)]
                             if not xml:
-                                log.error(f'XML is empty, skipping. (xml: {xml!r})')
+                                # NH has closed the socket for some reason
+                                if reader.at_eof():
+                                    # ask for immediat reconnection
+                                    connected = False
+                                    timeout = None
+                                    break
+                                log.error(f'XML is empty, skipping. (buffer: {buffer!r})')
                                 continue
                             await xml_callback(xml)
                             break
-
-                    nh_settings.refresh_from_db()
-                    await asyncio.sleep(nh_settings.nh_refresh_rate)
-                    log.info(f'Next download in {tick}s.')
+                    else:
+                        nh_settings.refresh_from_db()
+                        await asyncio.sleep(nh_settings.nh_refresh_rate)
+                        log.info(f'Next download in {tick}s.')
         except Exception as e:
             raise e
 
-        await asyncio.sleep(timeout)
-        timeout *= 2
+        if timeout is None: # requested instant reconnection before
+            timeout = 1
+        else:
+            await asyncio.sleep(timeout)
+            timeout *= 2
 
         if timeout > max_timeout:
             timeout = max_timeout
